@@ -112,3 +112,26 @@ InitTestScene*.unity*
 
 # Auto-generated cache in Assets folder
 /[Aa]ssets/[Ss]ceneDependencyCache*
+
+# Assistant helpers and intermediate material: keep these at the project root.
+# Root-only rules leave imported/generated content inside Assets eligible for Git.
+/[Oo]utput/
+/[Oo]utputs/
+/[Aa]rtifacts/
+/[Gg]enerated/
+/[Ss]cratch/
+/[Tt]mp/
+/[Tt]ools/
+/[Aa]utomation/
+/[Ss]cripts/
+/[Rr]ulebooks/
+/[Rr]eports/
+/*.py
+/*.ipynb
+/*.log.*
+/__pycache__/
+/.pytest_cache/
+/.mypy_cache/
+/.ruff_cache/
+/.venv/
+/venv/

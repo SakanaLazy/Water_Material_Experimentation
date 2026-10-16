@@ -1,0 +1,136 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-6527616218114192107
+MonoBehaviour:
+  m_ObjectHideFlags: 11
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Editor::UnityEditor.Rendering.Universal.AssetVersion
+  version: 10
+--- !u!21 &2100000
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: M_Water_LightlyStylized_Volume
+  m_Shader: {fileID: -6465566751694194690, guid: f2931f10b1b2921d603716e44f2f70ae, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
+  m_LightmapFlags: 2
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses:
+  - MOTIONVECTORS
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _Caustics_Atlas:
+        m_Texture: {fileID: 2800000, guid: 3f4397f5ac31bcc4dab233e051dbab8d, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Water_Map:
+        m_Texture: {fileID: 2800000, guid: bde36b1d85f3b654490ff6b21b8c6d7d, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Water_Normal:
+        m_Texture: {fileID: 2800000, guid: 90868873a56d7b142a9b845aa5fe020b, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_Lightmaps:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_LightmapsInd:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_ShadowMasks:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _Caustics_Fade_Depth: 3
+    - _Caustics_Scale: 0.25
+    - _Caustics_Speed: 0.7
+    - _Caustics_Strength: 0.1
+    - _Coastal_Frequency: 9
+    - _Coastal_Intensity: 0.53333336
+    - _Coastal_Scale: 0.6
+    - _Coastal_Speed: 1.1
+    - _Coastal_Width: 1
+    - _Contact_Intensity: 0.85
+    - _Contact_Scale: 2.2
+    - _Contact_Speed: 0.9
+    - _Contact_Width: 0.22
+    - _Crest_Foam_Full: 0.0008
+    - _Crest_Foam_Noise_Scale: 25
+    - _Crest_Foam_Noise_Speed: 0.03
+    - _Crest_Foam_Start: 0.00065
+    - _Crest_Noise_Full: 0.55
+    - _Crest_Noise_Start: 0.32
+    - _Crest_Strength: 0.425
+    - _Debug_View: 0
+    - _Depth_Density: 0.8
+    - _Detail_Scale: 30
+    - _Detail_Strength: 0.35
+    - _Enable_Caustics: 1
+    - _Enable_Coastal_Foam: 1
+    - _Enable_Crest_Foam: 1
+    - _Enable_Depth: 1
+    - _Enable_Refraction: 1
+    - _Enable_Shoreline_Foam: 1
+    - _Enable_Surface_Foam: 1
+    - _Foam_Bubble_Scale: 742.4621
+    - _Foam_Bump_Strength: 0.075
+    - _Foam_Intensity: 1
+    - _Foam_Opacity: 0.98
+    - _Foam_Smoothness: 0.3
+    - _Normal_Strength: 0.1
+    - _QueueControl: 0
+    - _QueueOffset: 0
+    - _Refraction_Strength: 0.004
+    - _Style: 0.33333334
+    - _Surface_Foam_Amount: 0.48
+    - _Surface_Foam_Intensity: 0.5
+    - _Surface_Foam_Scale: 0.55
+    - _Surface_Foam_Speed: 0.08
+    - _Surface_Foam_Stretch: 2.2
+    - _Swell_Height: 0.055
+    - _Swell_Length: 3.5
+    - _Swell_Speed: 0.85
+    - _Volume_Fallback_Thickness: 0.5
+    - _Volume_Normal_Tiling: 0.25
+    - _Water_Opacity: 1
+    - _Water_Specular: 0.06
+    - _Wave_1_Height: 0.05
+    - _Wave_1_Scale: 1.4
+    - _Wave_1_Speed: 0.025
+    - _Wave_2_Height: 0.08
+    - _Wave_2_Scale: 1.8
+    - _Wave_2_Speed: 0.018
+    m_Colors:
+    - _Crest_Foam_Noise_Direction: {r: 1, g: 0.3, b: 0, a: 0}
+    - _Deep_Color: {r: 0.025, g: 0.17, b: 0.28, a: 1}
+    - _Foam_Color: {r: 0.78, g: 0.85, b: 0.82, a: 1}
+    - _Surface_Foam_Direction: {r: 1, g: 0.3, b: 0, a: 0}
+    - _Water_Color: {r: 0.12, g: 0.62, b: 0.63, a: 1}
+    - _Water_Emission_Intensity: {r: 0, g: 0, b: 0, a: 0}
+    - _Water_Transmission: {r: 0.45, g: 0.85, b: 0.95, a: 1}
+    - _Wave_1_Direction: {r: 1, g: 0.35, b: 0, a: 0}
+    - _Wave_2_Direction: {r: -0.35, g: 1, b: 0, a: 0}
+  m_BuildTextureStacks: []
+  m_AllowLocking: 1
