@@ -19,7 +19,8 @@ public static class WaterPackageExporter
         ShaderRoot+"Masters", ShaderRoot+"Subgraphs", ShaderRoot+"Includes", ShaderRoot+"Hidden",
         "Assets/Water/Runtime/WaterVolumeBackDepthFeature.cs",
         "Assets/Editor/WaterSystemShaderGUI.cs", "Assets/Editor/WaterVolumeSetup.cs",
-        "Assets/Materials/Water/Textures/CausticsAtlas.png"
+        "Assets/Materials/Water/Textures/CausticsAtlas.png",
+        "Assets/Water/Documentation/LICENSE.txt", "Assets/Water/Documentation/CREDIT.txt"
     };
     [Serializable] sealed class PackageRecord
     {
@@ -55,7 +56,11 @@ public static class WaterPackageExporter
             records.Add(Export(name,style+" / plane and volume",roots,required,false));
         }
         records.Add(Export("WaterSystem_GraphsOnly","Graphs and required shader support",GraphRoots,required,false));
-        records.Add(Export("WaterSystem_Complete","All four styles, materials and showcases",GraphRoots.Concat(new[]{"Assets/WaterShowcase","Assets/Water/Runtime"}),required,true));
+        var allPresets=Styles.SelectMany(style=>new[]{
+            "Assets/WaterShowcase/M_Water_"+style+"_Plane.mat",
+            "Assets/WaterShowcase/M_Water_"+style+"_Volume.mat"
+        });
+        records.Add(Export("WaterSystem_Complete","All four styles / all eight presets",GraphRoots.Concat(allPresets),required,true));
         var catalog=new Catalog{unityVersion=Application.unityVersion,packages=records.ToArray()};
         File.WriteAllText(Output+"/package-catalog.json",JsonUtility.ToJson(catalog,true)+"\n");
         File.WriteAllText(Output+"/SHA256SUMS.txt",string.Join("\n",records.Select(r=>r.sha256+"  "+r.file))+"\n");
@@ -68,11 +73,13 @@ public static class WaterPackageExporter
     {
         string note=NotesRoot+"/"+name+".txt";
         string contents=label+"\n\n"+ImportNotes(required)+"\n";
-        contents+=complete?"Includes all eight presets and both showcase scenes.\n":"No demo scenes or project renderer settings are included.\n";
+        contents+=complete?"Includes all eight water presets.\n":"";
+        contents+="Includes required shader dependencies. No demo scenes or project renderer settings are included.\n";
         if(name.EndsWith("GraphsOnly"))contents+="No preset materials are included. Required HLSL, default textures, caustic atlas, Inspector and volume renderer support accompany the graphs. Create a material from Water System/SG_Water_Plane or Water System/SG_Water_Volume.\n";
         else if(!complete)contents+="Includes the plane and volume presets for this style. The shared graphs expose all style controls, but the other three styles' material presets are not included.\n";
         contents+="Packages retain shared GUIDs and can be imported together. Importing another package updates the shared assets instead of duplicating them.\n";
         contents+="The current system supports viewing water from outside. Underwater camera rendering is not implemented.\n";
+        contents+="Free to use, modify and redistribute. Commercial use requires visible credit: Water system by LazySakana — https://lazysakana.co.in. Public credit is optional for noncommercial use. See Assets/Water/Documentation/LICENSE.txt.\n";
         File.WriteAllText(note,contents);AssetDatabase.ImportAsset(note,ImportAssetOptions.ForceSynchronousImport);
         var expanded=roots.Concat(new[]{note,NotesRoot+"/Dependencies.json"}).SelectMany(Expand).Distinct().ToArray();
         var assets=AssetDatabase.GetDependencies(expanded,true).Where(IsLocal).Distinct().OrderBy(p=>p,StringComparer.Ordinal).ToArray();
@@ -85,7 +92,7 @@ public static class WaterPackageExporter
             if(!assets.Contains(asset))throw new Exception("Incomplete dependency closure: "+asset);
         int presets=assets.Count(p=>p.StartsWith("Assets/WaterShowcase/M_Water_")&&p.EndsWith(".mat"));
         if(presets!=(complete?8:name.EndsWith("GraphsOnly")?0:2))throw new Exception("Incorrect material scope in "+name+": "+presets);
-        if(!complete&&assets.Any(p=>p.EndsWith(".unity")))throw new Exception("Unexpected scene in "+name);
+        if(assets.Any(p=>p.EndsWith(".unity")))throw new Exception("Unexpected scene in "+name);
         if(name.EndsWith("GraphsOnly")&&assets.Any(p=>p.EndsWith(".mat")))throw new Exception("Unexpected material in graphs package.");
         string output=Output+"/"+name+".unitypackage";
         UnityEditor.AssetPackage.Package.Export(new UnityEditor.AssetPackage.ExportPackageParameters(assets,output,null,ExportPackageOptions.Default));
@@ -134,9 +141,10 @@ public static class WaterPackageExporter
         var text=new StringBuilder("# Water System packages\n\n");
         foreach(var record in records)text.AppendLine("- `"+record.file+"`: "+record.label+".");
         text.AppendLine("\n"+ImportNotes(required));
-        text.AppendLine("Style packages contain both plane and volume presets plus all required local dependencies. GraphsOnly contains the editable graphs and their required HLSL, textures, Inspector and renderer support; it has no preset materials or demo scenes. Complete includes all four styles, eight water materials and both showcases.");
+        text.AppendLine("Style packages contain both plane and volume presets plus all required local dependencies. GraphsOnly contains the editable graphs and their required HLSL, textures, Inspector and renderer support; it has no preset materials. Complete includes all four styles and all eight water materials. None of the packages include demo scenes.");
         text.AppendLine("\nPackages share GUIDs and can be imported together. Source asset lists, external package requirements and SHA-256 hashes are recorded in package-catalog.json and SHA256SUMS.txt. Export tools and deprecated graphs are excluded.");
-        text.AppendLine("\nThe showcase camera supports either the Input System or the legacy input manager. Neither input package is required to use the water materials. Underwater camera rendering is planned separately.");
+        text.AppendLine("\nThe water materials do not require an input package. Underwater camera rendering is not supported.");
+        text.AppendLine("\nFree to use, modify and redistribute. Commercial use requires visible credit: Water system by LazySakana — https://lazysakana.co.in. Public credit is optional for noncommercial use. The attribution licence is included in every package.");
         return text.ToString();
     }
 }

@@ -1,4 +1,4 @@
-All four styles, materials and showcases
+All four styles / all eight presets
 
 Exported with Unity 6000.6.2f1. Install Universal RP and Shader Graph in Package Manager before importing; Unity resolves their dependencies.
 Resolved package versions:
@@ -22,6 +22,8 @@ After import choose Water > Set Up Active URP Renderer. This enables opaque/dept
 If layer 30 is occupied, the helper stops; configure a dedicated volume layer and renderer feature manually. Put closed water renderers on that layer. Use the plane master for surface meshes and the volume master for separate closed meshes.
 Choose your URP asset in Graphics/Quality settings before running setup. No project pipeline or layer settings are overwritten during import.
 
-Includes all eight presets and both showcase scenes.
+Includes all eight water presets.
+Includes required shader dependencies. No demo scenes or project renderer settings are included.
 Packages retain shared GUIDs and can be imported together. Importing another package updates the shared assets instead of duplicating them.
 The current system supports viewing water from outside. Underwater camera rendering is not implemented.
+Free to use, modify and redistribute. Commercial use requires visible credit: Water system by LazySakana — https://lazysakana.co.in. Public credit is optional for noncommercial use. See Assets/Water/Documentation/LICENSE.txt.

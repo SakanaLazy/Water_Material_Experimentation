@@ -1,0 +1,4 @@
+Water system by LazySakana — https://lazysakana.co.in
+
+Free to use, modify and redistribute. Commercial use requires visible credit in the project's credits or documentation. Public credit is optional for noncommercial use. Where hyperlinks are supported, link LazySakana to https://lazysakana.co.in.
+See LICENSE.txt for the full terms.

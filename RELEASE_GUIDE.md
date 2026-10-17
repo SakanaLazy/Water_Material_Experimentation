@@ -1,6 +1,10 @@
-# Water System package
+# Water System v1.0.0
 
-The six separate Unity packages are under `Outputs/WaterSystem/Release/SplitPackages`. Uploading, licensing, repository rules, and the final release name remain owner-controlled.
+A reusable water material system for Unity 6 and URP, with plane and closed-volume materials in four styles: Realistic, Lightly Stylized, Strongly Stylized, and Graphic.
+
+## Downloads
+
+Download one of the six `.unitypackage` assets attached to this release:
 
 | Package | Contents |
 | --- | --- |
@@ -8,30 +12,21 @@ The six separate Unity packages are under `Outputs/WaterSystem/Release/SplitPack
 | `WaterSystem_LightlyStylized.unitypackage` | Lightly Stylized plane and volume presets |
 | `WaterSystem_StronglyStylized.unitypackage` | Strongly Stylized plane and volume presets |
 | `WaterSystem_Graphic.unitypackage` | Graphic plane and volume presets |
-| `WaterSystem_GraphsOnly.unitypackage` | Two masters, 34 subgraphs, and required shader support; no preset materials |
-| `WaterSystem_Complete.unitypackage` | All eight water presets and both showcases |
+| `WaterSystem_GraphsOnly.unitypackage` | Both masters and all 34 subgraphs; create your own materials |
+| `WaterSystem_Complete.unitypackage` | All four styles and all eight material presets |
 
-Each package includes its project-owned dependencies, a package-specific install note, and a resolved Unity package dependency list. Shared GUIDs allow the packages to be imported together.
+Each package includes the required editable graphs, HLSL, textures, caustic atlas, material Inspector, volume renderer support, licence, and credit notice. Import into a Unity URP project, then choose **Water → Set Up Active URP Renderer**. Assign a plane material to a surface mesh or a volume material to a separate closed mesh on **Water Volume / layer 30**.
 
-## Import
+The packages use shared asset identities and can be imported together. `SHA256SUMS.txt` contains the package checksums.
 
-1. Use Unity 6000.6.2f1. Install Universal RP and Shader Graph in Package Manager first. The current export resolves both to 17.6.0; the complete dependency list is in `Assets/Water/Documentation/Packages/Dependencies.json`. Package Manager components are installation prerequisites and are not copied from Library/PackageCache into these archives.
-2. Import the desired Unity package into a URP project.
-3. Choose Water > Set Up Active URP Renderer. The helper installs the volume depth feature and enables depth/opaque textures. It stops safely if layer 30 conflicts with an existing layer.
-4. Assign the imported plane preset to a surface mesh or the volume preset to a separate closed mesh on Water Volume / layer 30. The GraphsOnly package requires creating and configuring a material from a master graph. Both WaterShowcase scenes are included in Complete.
+## Compatibility
 
-The showcase works with the Input System or legacy input manager. The material system itself needs neither camera presenter nor input package.
+Verified on Windows with DX11 in **Unity 6.3 LTS (6000.3.12f1)** and **Unity 6.6 (6000.6.2f1)**. The LTS check imported the release package into a separate URP project and rendered all eight presets without shader errors or pink materials. The rendering path requires URP with Render Graph enabled. Built-in and HDRP are not supported. Underwater cameras and overlapping water volumes are not supported.
 
-## Contents
+## Licence
 
-- Two current masters and 34 organized subgraphs.
-- Eight material presets: four styles for each geometry.
-- Shared HLSL, back-depth shader, renderer feature, material Inspector, and setup helper.
-- Both showcase scenes and demonstration meshes in Complete; required material textures and a 32-frame caustic atlas in the relevant packages.
-- Setup notes and local validation reports in the ZIP.
+Free to use, modify, combine, and redistribute, including in commercial projects, with no licence fee or royalty. **Commercial use requires visible credit to LazySakana**, linked to https://lazysakana.co.in, in the project's credits or documentation. Public credit is optional for noncommercial use. Retain the licence and copyright notice when redistributing the water system itself.
 
-Old masters, backup graphs, the experimental reference graph, export tools, and project-specific URP settings stay in the repository and are excluded from the reusable packages. Imported assets retain the same GUIDs as the project. Import does not change another project's render pipeline or layers; the setup menu performs those settings changes when invoked.
+> Water system by [LazySakana](https://lazysakana.co.in).
 
-## Release preparation
-
-Review the water media first. Finalize the requested credit terms and repository/license files before public upload. No license, attribution identity, release tag, or public distribution has been invented or published by the assistant.
+See `LICENSE.md` for the full custom attribution terms. They are included in every package.
