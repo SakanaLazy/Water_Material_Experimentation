@@ -113,7 +113,7 @@ InitTestScene*.unity*
 # Auto-generated cache in Assets folder
 /[Aa]ssets/[Ss]ceneDependencyCache*
 
-# Assistant helpers and intermediate material: keep these at the project root.
+# Local tools and intermediate files.
 # Root-only rules leave imported/generated content inside Assets eligible for Git.
 /[Oo]utput/
 /[Oo]utputs/
@@ -122,7 +122,6 @@ InitTestScene*.unity*
 /[Ss]cratch/
 /[Tt]mp/
 /[Tt]ools/
-/[Aa]utomation/
 /[Ss]cripts/
 /[Rr]ulebooks/
 /[Rr]eports/

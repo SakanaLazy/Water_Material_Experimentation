@@ -9,9 +9,6 @@ using UnityEngine.Rendering.Universal;
 // back face supplies exit depth; overlapping volumes require separate rendering.
 public sealed class WaterVolumeBackDepthFeature : ScriptableRendererFeature
 {
-    public static int Enqueued { get; private set; }
-    public static int Recorded { get; private set; }
-    public static RenderTexture LastDepth { get; private set; }
     public LayerMask volumeLayer = 1 << 30;
     [SerializeField] Shader backDepthShader;
     BackDepthPass pass;
@@ -24,7 +21,7 @@ public sealed class WaterVolumeBackDepthFeature : ScriptableRendererFeature
     protected override void Dispose(bool disposing) { pass?.Dispose(); }
     public override void AddRenderPasses(ScriptableRenderer renderer, ref RenderingData renderingData)
     {
-        if (backDepthShader && renderingData.cameraData.cameraType != CameraType.Preview) { renderer.EnqueuePass(pass); Enqueued++; }
+        if (backDepthShader && renderingData.cameraData.cameraType != CameraType.Preview) { renderer.EnqueuePass(pass); }
     }
     sealed class BackDepthPass : ScriptableRenderPass
     {
@@ -34,10 +31,9 @@ public sealed class WaterVolumeBackDepthFeature : ScriptableRendererFeature
         readonly List<ShaderTagId> tags = new List<ShaderTagId> { new ShaderTagId("UniversalForward"), new ShaderTagId("UniversalForwardOnly"), new ShaderTagId("SRPDefaultUnlit") };
         sealed class Data { public RendererListHandle list; }
         public BackDepthPass(LayerMask layer, Shader shader) { this.layer = layer; this.shader = shader; }
-        public void Dispose() { target?.Release(); target=null;LastDepth=null; }
+        public void Dispose() { target?.Release(); target=null; }
         public override void RecordRenderGraph(RenderGraph graph, ContextContainer frameData)
         {
-            Recorded++;
             var camera = frameData.Get<UniversalCameraData>();
             var rendering = frameData.Get<UniversalRenderingData>();
             var light = frameData.Get<UniversalLightData>();
@@ -45,7 +41,6 @@ public sealed class WaterVolumeBackDepthFeature : ScriptableRendererFeature
             desc.msaaSamples = 1; desc.depthBufferBits = 0; desc.graphicsFormat = GraphicsFormat.R32_SFloat;
             desc.depthStencilFormat=GraphicsFormat.None;
             RenderingUtils.ReAllocateHandleIfNeeded(ref target,desc,FilterMode.Point,TextureWrapMode.Clamp,name:"Water volume exit depth");
-            LastDepth=target.rt;
             var color = graph.ImportTexture(target,new ImportResourceParams{clearOnFirstUse=true,clearColor=Color.clear,discardOnLastUse=false});
             desc.graphicsFormat = GraphicsFormat.None; desc.depthStencilFormat = GraphicsFormat.D32_SFloat;
             var depth = UniversalRenderer.CreateRenderGraphTexture(graph, desc, "Water volume exit Z", true, FilterMode.Point);

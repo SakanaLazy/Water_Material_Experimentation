@@ -12,9 +12,6 @@ float WaterNoise(float2 p)
     return lerp(lerp(WaterHash(i),WaterHash(i+float2(1,0)),f.x),lerp(WaterHash(i+float2(0,1)),WaterHash(i+1),f.x),f.y);
 }
 float WaterFbm(float2 p) { return WaterNoise(p)*.65+WaterNoise(p*2.07+17.3)*.25+WaterNoise(p*4.13-5.2)*.1; }
-float _WaterCaptureFreeze;
-float _WaterCaptureTime;
-float WaterClock(float time) { return lerp(time,_WaterCaptureTime,_WaterCaptureFreeze); }
 // Packed, fine bubbles: bright foam body with sparse rounded pinholes.
 // Cell boundaries are deliberately absent; F2-F1 edges read as cracked paint.
 float WaterFoamGrain(float2 p)
@@ -34,7 +31,6 @@ float WaterFoamGrain(float2 p)
 
 void WaterCrestDetail_float(float Crest, float2 UV, float Time, float Scale, float Strength, float Style, float Enabled, float UpFacing, float Amount, out float Mask)
 {
-    Time=WaterClock(Time);
     Mask=0;
     UNITY_BRANCH if(Enabled<.5||Crest<.015) return;
     float2 p=UV*max(Scale,1.0)+float2(Time*.17,-Time*.09);
@@ -98,7 +94,6 @@ void WaterIntersectionDepth_float(float3 PositionWS, float4 ScreenUV, float RawD
 }
 void WaterSurfaceFoam_float(float3 PositionWS, float Time, float Scale, float Speed, float2 Direction, float Amount, float Stretch, float Intensity, float GlobalIntensity, float Style, float Enabled, float UpFacing, out float Mask)
 {
-    Time=WaterClock(Time);
     Mask=0;UNITY_BRANCH if(Enabled<.5||Amount<.001||Intensity<.001)return;
     float2 direction=normalize(Direction+float2(.0001,.0002));
     float2 p=float2(dot(PositionWS.xz,direction),dot(PositionWS.xz,float2(-direction.y,direction.x)));
@@ -116,7 +111,6 @@ void WaterSurfaceFoam_float(float3 PositionWS, float Time, float Scale, float Sp
 }
 void WaterContactFoam_float(float3 PositionWS, float Depth, float Time, float Width, float Scale, float Speed, float Intensity, float GlobalIntensity, float Style, float Enabled, float UpFacing, out float Mask)
 {
-    Time=WaterClock(Time);
     Mask=0;UNITY_BRANCH if(Enabled<.5||Depth>Width*1.4)return;
     float2 p=PositionWS.xz*Scale+float2(Time*Speed*.07,-Time*Speed*.045);
     float noise=WaterFbm(p);
@@ -130,7 +124,6 @@ void WaterContactFoam_float(float3 PositionWS, float Depth, float Time, float Wi
 }
 void WaterCoastalFoam_float(float3 PositionWS, float Depth, float Time, float Width, float Speed, float Frequency, float Scale, float Intensity, float GlobalIntensity, float Style, float Enabled, float UpFacing, out float Mask)
 {
-    Time=WaterClock(Time);
     Mask=0;UNITY_BRANCH if(Enabled<.5||Depth>Width)return;
     float2 p=PositionWS.xz*Scale;
     float warp=WaterFbm(p+Time*.016);
@@ -164,7 +157,6 @@ float2 WaterBubbleSlope(float2 p)
 }
 void WaterSurfaceDetail_float(float3 BaseNormal, float2 UV, float Time, float Foam, float Style, float NormalStrength, float OriginalSmoothness, float FoamBumpStrength, float FoamBubbleScale, out float3 Normal, out float Smoothness)
 {
-    Time=WaterClock(Time);
     float strength=NormalStrength*lerp(1,.3,Style);
     float3 normal=normalize(float3(BaseNormal.xy*strength,max(.2,BaseNormal.z)));
     float2 bubbleUV=UV*max(FoamBubbleScale,1)+float2(Time*.17,-Time*.11);
@@ -225,7 +217,6 @@ float WaterCausticFrame(UnityTexture2D Atlas,float2 uv,float frame)
 }
 void WaterCaustics_float(float3 SceneColor,float3 SurfaceWS,float4 ScreenUV,float RawDepth,float Time,float Scale,float Speed,float Strength,float FadeDepth,float Enabled,float IsVolume,UnityTexture2D Atlas,out float3 Color,out float Mask)
 {
-    Time=WaterClock(Time);
     Color=SceneColor;Mask=0;
     UNITY_BRANCH if(Enabled<.5||Strength<.001)return;
     #if !defined(SHADERGRAPH_PREVIEW)
@@ -259,7 +250,6 @@ void WaterCaustics_float(float3 SceneColor,float3 SurfaceWS,float4 ScreenUV,floa
 
 void WaterPlaneSwell_float(float3 LegacyPosition, float Time, float Height, float Length, float Speed, out float3 Position, out float3 Normal)
 {
-    Time=WaterClock(Time);
     float k=6.2831853/max(Length,.1);
     float2 d1=normalize(float2(1,.35)),d2=normalize(float2(-.43,1));
     float a=dot(LegacyPosition.xz,d1)*k-Time*Speed;
@@ -270,7 +260,6 @@ void WaterPlaneSwell_float(float3 LegacyPosition, float Time, float Height, floa
 }
 void WaterVolumeSwell_float(float3 PositionOS, float3 NormalOS, float LegacyHeight, float Time, float Height, float Length, float Speed, out float3 Position, out float3 Normal)
 {
-    Time=WaterClock(Time);
     float k=6.2831853/max(Length,.1);
     float a=dot(PositionOS,float3(.83,.37,.54))*k-Time*Speed;
     float b=dot(PositionOS,float3(-.42,.72,.61))*k*1.6-Time*Speed*.8;
@@ -285,7 +274,7 @@ void WaterVolumeSwell_float(float3 PositionOS, float3 NormalOS, float LegacyHeig
     Normal=normalize(cross(dy,dz)*NormalOS.x+cross(dz,dx)*NormalOS.y+cross(dx,dy)*NormalOS.z);
 }
 void WaterUpFacing_float(float3 NormalWS, float IsVolume, out float Mask) { Mask=lerp(1,smoothstep(.05,.6,NormalWS.y),IsVolume); }
-void WaterVolumeAdvection_float(float3 PositionOS, float Time, out float3 Position) { Time=WaterClock(Time);Position=PositionOS+float3(Time*.013,Time*.007,-Time*.011); }
+void WaterVolumeAdvection_float(float3 PositionOS, float Time, out float3 Position) { Position=PositionOS+float3(Time*.013,Time*.007,-Time*.011); }
 void WaterDebugView_float(float3 ColorIn, float3 EmissionIn, float AlphaIn, float SmoothnessIn, float SpecularIn, float Crest, float Surface, float Shoreline, float Coastal, float Thickness, float3 Normal, float View, float Caustics, out float3 Color, out float3 Emission, out float Alpha, out float Smoothness, out float Specular)
 {
     Color=ColorIn;Emission=EmissionIn;Alpha=AlphaIn;Smoothness=SmoothnessIn;Specular=SpecularIn;
