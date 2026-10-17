@@ -21,7 +21,9 @@ The packages use shared asset identities and can be imported together. `SHA256SU
 
 ## Compatibility
 
-Verified on Windows with DX11 in **Unity 6.3 LTS (6000.3.12f1)** and **Unity 6.6 (6000.6.2f1)**. The LTS check imported the release package into a separate URP project and rendered all eight presets without shader errors or pink materials. The rendering path requires URP with Render Graph enabled. Built-in and HDRP are not supported. Underwater cameras and overlapping water volumes are not supported.
+Supports **Unity 6.3 LTS, 6.4, 6.5, and 6.6** with URP and Render Graph enabled. The rendering checks cover Windows with DX11. Built-in and HDRP are not supported. See the [README](https://github.com/SakanaLazy/Water_Material_Experimentation#performance) for measured GPU rendering costs and overdraw captures.
+
+**Camera inside the volume:** Volume water is designed to be viewed from outside. This release does not include an underwater shader or effect for a camera inside the volume, and entering the water does not switch to an underwater view. An underwater rendering system is planned for the next update. Intersecting or overlapping water volumes are not supported by this rendering path.
 
 ## Licence
 
