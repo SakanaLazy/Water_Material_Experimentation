@@ -18,6 +18,8 @@ It includes two master graphs, 34 shared subgraphs, eight material presets, and 
 
 Use the **Plane** material for a water surface with scenery below it. Use the **Volume** material for a separate closed mesh with visible sides. The renders show the volume material on water blocks and curved samples.
 
+> **Camera inside the volume:** The Volume material is designed to be viewed from outside the water. This release does not include an underwater shader or effect for a camera inside the volume, and entering the water does not switch to an underwater view. An underwater rendering system is planned for the next update.
+
 | Style | Appearance |
 | --- | --- |
 | **Realistic** | Detailed foam, transparent shallow water, and soft colour transitions |
