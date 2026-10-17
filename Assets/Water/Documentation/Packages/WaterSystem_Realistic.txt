@@ -1,0 +1,28 @@
+Realistic / plane and volume
+
+Exported with Unity 6000.6.2f1. Install Universal RP and Shader Graph in Package Manager before importing; Unity resolves their dependencies.
+Resolved package versions:
+com.unity.burst@2.0.0
+com.unity.collections@6.6.0
+com.unity.ext.nunit@2.1.0
+com.unity.graph-authoring@1.0.0
+com.unity.modules.imgui@1.0.0
+com.unity.modules.jsonserialize@1.0.0
+com.unity.nuget.mono-cecil@1.11.6
+com.unity.profiling.core@1.0.3
+com.unity.render-pipelines.core@17.6.0
+com.unity.render-pipelines.universal@17.6.0
+com.unity.render-pipelines.universal-config@17.6.0
+com.unity.searcher@4.9.5
+com.unity.shadergraph@17.6.0
+com.unity.test-framework@1.8.0
+com.unity.test-framework.performance@6.6.0
+Unity's Package Manager assets are prerequisites, not copied Library/PackageCache files.
+After import choose Water > Set Up Active URP Renderer. This enables opaque/depth textures, assigns layer 30 / Water Volume if available, and installs the back-face depth renderer feature.
+If layer 30 is occupied, the helper stops; configure a dedicated volume layer and renderer feature manually. Put closed water renderers on that layer. Use the plane master for surface meshes and the volume master for separate closed meshes.
+Choose your URP asset in Graphics/Quality settings before running setup. No project pipeline or layer settings are overwritten during import.
+
+No demo scenes or project renderer settings are included.
+Includes the plane and volume presets for this style. The shared graphs expose all style controls, but the other three styles' material presets are not included.
+Packages retain shared GUIDs and can be imported together. Importing another package updates the shared assets instead of duplicating them.
+The current system supports viewing water from outside. Underwater camera rendering is not implemented.

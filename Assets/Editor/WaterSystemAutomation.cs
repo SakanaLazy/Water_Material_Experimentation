@@ -88,6 +88,7 @@ public static class WaterSystemAutomation
                 case "encode": message=EncodeMotion(); break;
                 case "status": message=Status(); break;
                 case "package": message=ExportPackage(); break;
+                case "splitpackages": message=WaterPackageExporter.ExportAll(); break;
                 case "buildcheck": message=BuildCheck(); break;
                 case "sanity": message=Sanity(); break;
                 case "causticpair": message=CausticPair(); break;
