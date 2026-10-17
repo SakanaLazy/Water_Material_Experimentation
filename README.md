@@ -106,14 +106,52 @@ Every package includes the editable graphs, HLSL, textures, caustic atlas, mater
 
 **Unity 6 with the Universal Render Pipeline (URP) and Render Graph enabled.** The Built-in Render Pipeline and HDRP are not supported.
 
-<!-- VERIFIED_UNITY_VERSIONS -->
-| Unity version | Status |
-| --- | --- |
-| **Unity 6.6 — 6000.6.2f1** | Verified in the Windows Editor with DX11; recorded Windows development build |
-| **Unity 6.3 LTS — 6000.3.12f1** | Release package imported into a separate URP project; all eight presets rendered with DX11, without shader errors or pink materials |
-<!-- /VERIFIED_UNITY_VERSIONS -->
+| Supported Unity versions |
+| --- |
+| **Unity 6.3 LTS** |
+| **Unity 6.4** |
+| **Unity 6.5** |
+| **Unity 6.6** |
 
-Other Unity versions are not verified by these checks. This is an Editor-version compatibility list, not a claim of support for every target platform or graphics API.
+The rendering checks cover Windows with DX11. Platform and graphics API compatibility should be checked in your own project.
+
+## Performance
+
+Measured on an **NVIDIA GeForce RTX 3070 (8 GB)** and **AMD Ryzen 7 5800X**, using a Windows release player in **Unity 6.3 LTS (6000.3.12f1), URP 17.3.0, DX11**.
+
+The figures show **GPU time added by one water body**, compared with the same scene without water. The water affected approximately **26–34% of the view**. These timings include the volume depth pass where applicable. Lower values mean less GPU work in this test.
+
+| Style | Plane, 1080p | Volume, 1080p | Plane, 1440p | Volume, 1440p |
+| --- | ---: | ---: | ---: | ---: |
+| Realistic | 0.29 ms | 0.40 ms | 0.45 ms | 0.64 ms |
+| Lightly Stylized | 0.31 ms | 0.36 ms | 0.40 ms | 0.58 ms |
+| Strongly Stylized | 0.27 ms | 0.31 ms | 0.34 ms | 0.49 ms |
+| Graphic | 0.28 ms | 0.31 ms | 0.34 ms | 0.50 ms |
+
+![Measured GPU rendering cost for all four plane and volume presets at 1080p and 1440p](docs/media/Performance/gpu-cost.png)
+
+Each value is the median of three runs, with a matching no-water baseline subtracted from each run. Whiskers show the range across those runs. Full-scene GPU frame times at the 95th percentile ranged from **2.03–2.30 ms at 1080p** and **2.51–2.79 ms at 1440p**; those frame times include the background scene.
+
+<details>
+<summary>Benchmark setup</summary>
+
+One animated water mesh with approximately 33,000 triangles, a ground plane, three submerged cubes, and one directional light. Water affected approximately 26–34% of the view. Each run used at least 120 warm-up frames and 300 unique GPU timing samples, with case order reversed on alternating runs. Timings came from Unity's Frame Timing Manager in a non-development player; debug views were captured separately.
+
+Forward rendering with Render Graph enabled and VSync disabled. Depth and opaque textures were enabled in both the baseline and water cases; the opaque texture used 2× bilinear downsampling. HDR, MSAA, shadows, and post-processing were disabled. The 1080p pass used render scale 1; the 1440p pass rendered internally at 2560×1440 and was downsampled to a 1920×1080 window. The volume depth buffer's dimensions were checked against the internal resolution.
+
+These measurements apply to this scene and hardware. Screen coverage, mesh density, lighting, overlapping transparent objects, and the target GPU affect rendering cost.
+
+</details>
+
+### Overdraw view
+
+Unity's [URP Rendering Debugger](https://docs.unity3d.com/6000.0/Documentation/Manual/urp/features/rendering-debugger-reference.html) shows where visible draws overlap. These captures use a maximum overdraw count of 10. The water is mostly cyan, representing about two layers, with small three-layer regions around scene objects. There are no red high-overdraw regions in these examples.
+
+| Plane | Volume |
+| --- | --- |
+| ![URP overdraw view of one water plane, mostly cyan with small three-layer regions](docs/media/Performance/plane-overdraw.png) | ![URP overdraw view of one closed water volume, mostly cyan with small three-layer regions](docs/media/Performance/volume-overdraw.png) |
+
+Overdraw colours count overlapping draws; they do not measure the instruction cost of the water shader. The GPU timings above include the water shading and the volume's additional depth pass.
 
 ## Import and use
 
@@ -132,7 +170,7 @@ For Graphs Only, create a material using `Water System/SG_Water_Plane` or `Water
 - Refraction uses the opaque scene colour; transparent objects behind the water are not included in that texture.
 - Volume water is intended for a camera outside separate, closed meshes. Underwater cameras and intersecting or overlapping volumes are not supported by this rendering path.
 - Waves, foam, and caustics are visual effects, without fluid or buoyancy simulation.
-- The recorded checks cover Windows. Mobile, XR, and performance budgets are not qualified by those checks.
+- The recorded checks cover Windows. Mobile and XR performance have not been measured.
 
 ## Licence and credit
 
